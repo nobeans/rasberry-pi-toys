@@ -21,12 +21,12 @@ echo out > $LED_GPIO_DIR/direction
 led_status=0
 while true
 do
-	# While pushing a task switch, turn on LED.
-	if [ $( cat $SWITCH_GPIO_DIR/value ) -eq 1 ]; then
-		echo 1 > $LED_GPIO_DIR/value
-	else
-		echo 0 > $LED_GPIO_DIR/value
-	fi
-	sleep .1
+    # While pushing a task switch, turn on LED.
+    if [ $( cat $SWITCH_GPIO_DIR/value ) -eq 1 ]; then
+        echo 1 > $LED_GPIO_DIR/value
+    else
+        echo 0 > $LED_GPIO_DIR/value
+    fi
+    sleep .1
 done
 

@@ -38,6 +38,6 @@ do
     else
         previous_switch_status=0
     fi
-    sleep .0625
+    sleep .001
 done
 

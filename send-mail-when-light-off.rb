@@ -29,11 +29,11 @@ ActionMailer::Base.smtp_settings = {
 }
 
 class Notifier < ActionMailer::Base
-  def sendmail(body)
+  def sendmail(subject, body)
     mail(
       to:      $config["mail"]["to"],
       from:    $config["mail"]["from"],
-      subject: 'Changed lightness',
+      subject: subject,
       body:    body.to_s
     ).deliver
   end
@@ -47,10 +47,12 @@ loop do
     lightLevel = ((raw[0]<<8) + raw[1]) & 0x03FF
   end
   puts "#{lastLightLevel} -> #{lightLevel}"
-  if lightLevel < lastLightLevel - 5 then
-    puts "Sending..."
-    Notifier.sendmail("現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
-    puts "Sent."
+  if lastLightLevel > 7 and lightLevel < 4 then
+    puts "Light off"
+    Notifier.sendmail('Light off', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
+  elsif lastLightLevel < 3 and lightLevel > 5 then
+    puts "Light on"
+    Notifier.sendmail('Light on', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
   end
   lastLightLevel = lightLevel
   sleep 60 # sec

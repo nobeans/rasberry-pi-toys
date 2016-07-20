@@ -41,19 +41,23 @@ end
 
 lastLightLevel = 0
 loop do
-  lightLevel = 0
-  PiPiper::Spi.begin do |spi|
-    raw = spi.write [0b01101000,0]
-    lightLevel = ((raw[0]<<8) + raw[1]) & 0x03FF
+  begin
+    lightLevel = 0
+    PiPiper::Spi.begin do |spi|
+      raw = spi.write [0b01101000,0]
+      lightLevel = ((raw[0]<<8) + raw[1]) & 0x03FF
+    end
+    puts "#{lastLightLevel} -> #{lightLevel}"
+    if lastLightLevel > 7 and lightLevel < 4 then
+      puts "Light off"
+      Notifier.sendmail('Light off', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
+    elsif lastLightLevel < 3 and lightLevel > 5 then
+      puts "Light on"
+      Notifier.sendmail('Light on', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
+    end
+    lastLightLevel = lightLevel
+    sleep 60 # sec
+  rescue Exception => e
+      puts "Exception occured: " + e
   end
-  puts "#{lastLightLevel} -> #{lightLevel}"
-  if lastLightLevel > 7 and lightLevel < 4 then
-    puts "Light off"
-    Notifier.sendmail('Light off', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
-  elsif lastLightLevel < 3 and lightLevel > 5 then
-    puts "Light on"
-    Notifier.sendmail('Light on', "現在の部屋の明かりの値は#{lightLevel}です。(元の明るさ: #{lastLightLevel})")
-  end
-  lastLightLevel = lightLevel
-  sleep 60 # sec
 end

@@ -1,10 +1,5 @@
 # Raspberryで赤外線リモコン
 
-* https://qiita.com/KAKY/items/55e6c54fa2073cdc0bbe
-* https://qiita.com/Library/items/35eec18fbe11387be6d5
-* https://qiita.com/gao_/items/e8394656003f349952d6
-
-
 ## 赤外線を送信する
 
 ```
@@ -15,7 +10,7 @@ $ irsend LIST "" ""
 $ irsend LIST bose ""
 
 # 送信する
-$ irsend LIST bose  on
+$ irsend SEND_ONCE bose on
 ```
 
 
@@ -39,4 +34,12 @@ sudo mode2 -d /dev/lirc0
 ```
 sudo sh -c "cat lirc-*.conf > /etc/lirc/lircd.conf"
 ```
+
+
+## 参考URL
+
+* https://qiita.com/KAKY/items/55e6c54fa2073cdc0bbe
+* https://qiita.com/Library/items/35eec18fbe11387be6d5
+* https://qiita.com/gao_/items/e8394656003f349952d6
+* https://qiita.com/ponkio-o/items/4e7f8dd6e05378ca9ceb (重要)
 
